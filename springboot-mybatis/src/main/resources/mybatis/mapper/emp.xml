@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itlaoqi.springbootmybatis.mapper.EmpMapper">
+	
+	<select id="findById" parameterType="Integer" resultType="com.itlaoqi.springbootmybatis.entity.Emp">
+		SELECT * FROM emp WHERE empno = #{value}
+	</select>
+	
+	<select id="findEmps" parameterType="java.util.Map" resultType="java.util.LinkedHashMap">
+		SELECT * FROM emp e, dept d WHERE e.deptno = d.deptno
+		<if test="pdname != null">
+		AND dname = #{pdname}
+		</if>
+		<if test="psal != null">
+		AND sal > #{psal}
+		</if>
+	</select>
+	
+	<insert id="create" parameterType="com.itlaoqi.springbootmybatis.entity.Emp">
+		INSERT INTO `scott`.`emp`(`ename`, `job`, `mgr`, `hiredate`, `sal`, `comm`, `deptno`)
+        VALUES ( #{ename}, #{job}, #{mgr}, #{hiredate}, #{sal}, #{comm}, #{deptno})
+        <selectKey keyProperty="empno" keyColumn="empno" resultType="Integer" order="AFTER">
+            select LAST_INSERT_ID()
+        </selectKey>
+	</insert>
+	
+	<update id="update" parameterType="com.itlaoqi.springbootmybatis.entity.Emp">
+		UPDATE emp SET `ename` = #{ename}, `job` = #{job}, `mgr` = #{mgr}, `hiredate` = #{hiredate}, `sal` = #{sal}, `comm` = #{comm}, `deptno` = #{deptno}
+		WHERE empno = #{empno}
+	</update>
+	
+	<delete id="delete" parameterType="Integer">
+		DELETE FROM emp WHERE empno = #{value}
+	</delete>
+	
+</mapper>
